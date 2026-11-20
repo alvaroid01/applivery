@@ -46,9 +46,13 @@ The tests mock the database. They do not connect to MongoDB.
 
 ## API docs
 
-Swagger UI: [http://localhost:8888/api-docs/](http://localhost:8888/api-docs/)
+Local Swagger UI: [http://localhost:8888/api-docs/](http://localhost:8888/api-docs/)
 
-OpenAPI document: [http://localhost:8888/openapi.json](http://localhost:8888/openapi.json)
+Local OpenAPI document: [http://localhost:8888/openapi.json](http://localhost:8888/openapi.json)
+
+Deployed Swagger UI: [https://applivery-production.up.railway.app/api-docs/](https://applivery-production.up.railway.app/api-docs/)
+
+Deployed OpenAPI document: [https://applivery-production.up.railway.app/openapi.json](https://applivery-production.up.railway.app/openapi.json)
 
 ## Endpoints
 
