@@ -62,7 +62,7 @@ Deployed OpenAPI document: [https://applivery-production.up.railway.app/openapi.
 | `GET` | `/audit` | Lists audits, newest first |
 | `GET` | `/audit/:id` | Returns one audit |
 | `DELETE` | `/audit/:id` | Deletes one audit and returns it |
-| `POST` | `/audit` | Placeholder response |
+| `POST` | `/audit` | Stores an audit with input and output |
 
 `POST /radar` example:
 

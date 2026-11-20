@@ -142,21 +142,38 @@ export const openApiSpec = {
             },
             post: {
                 tags: ['Audit'],
-                summary: 'Audit creation placeholder',
+                summary: 'Store an audit',
                 operationId: 'createAudit',
+                requestBody: {
+                    required: true,
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                required: ['input', 'output'],
+                                properties: {
+                                    input: { $ref: '#/components/schemas/RadarRequest' },
+                                    output: { $ref: '#/components/schemas/Coordinate' },
+                                },
+                            },
+                        },
+                    },
+                },
                 responses: {
-                    '200': {
-                        description: 'Placeholder response',
+                    '201': {
+                        description: 'The stored audit',
                         content: {
                             'application/json': {
-                                schema: {
-                                    type: 'object',
-                                    required: ['message'],
-                                    properties: {
-                                        message: { type: 'string' },
-                                    },
-                                },
-                                example: { message: 'Hello' },
+                                schema: { $ref: '#/components/schemas/Audit' },
+                            },
+                        },
+                    },
+                    '400': {
+                        description: 'input or output is missing',
+                        content: {
+                            'application/json': {
+                                schema: { $ref: '#/components/schemas/Error' },
+                                example: { code: 400, message: 'input and output are required' },
                             },
                         },
                     },

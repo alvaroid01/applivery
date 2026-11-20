@@ -1,4 +1,4 @@
-import type { IScan, TProtocol } from './types/index.ts';
+import type { ICoordinate, IScan, TProtocol } from './types/index.ts';
 //Center posotion in a radar is 0,0
 export const origin = { x: 0, y: 0 };
 
@@ -25,7 +25,7 @@ export const protocolFilters: Record<string, (scans: IScan[]) => IScan[]> = {
 export const proccessProtocol = (protocols: TProtocol[], scans: IScan[]) => {
     if (!scans && !protocols) return;
 
-    const filteredScans: IScan[] = applyContraints(scans, protocols);
+    const filteredScans: IScan[] = applyContraints(scans);
 
     let response: IScan[] = filteredScans;
 
@@ -47,8 +47,8 @@ export const proccessProtocol = (protocols: TProtocol[], scans: IScan[]) => {
     };
 };
 
-export const getDistance = (a: any): number => Math.hypot(a.x, a.y);
-export const applyContraints = (coordinates: IScan[], protocol: string[]): IScan[] => {
+export const getDistance = (point: ICoordinate): number => Math.hypot(point.x, point.y);
+export const applyContraints = (coordinates: IScan[]): IScan[] => {
     const filteredCoordinates = [...coordinates].filter((el: IScan) => {
         const calc = el.enemies.number > 0 && getDistance(el.coordinates) <= 100;
         return calc;

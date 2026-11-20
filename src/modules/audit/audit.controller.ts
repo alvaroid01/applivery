@@ -66,6 +66,23 @@ export const deleteAudit = async (req: Request<{ id: string }>, res: Response) =
     }
 };
 
-export const createAudit = async (_req: Request, res: Response) => {
-    res.status(200).json({ message: 'Hello' });
+export const createAudit = async (req: Request, res: Response) => {
+    const body = req.body as { input?: unknown; output?: { x?: unknown; y?: unknown } } | null;
+    const output = body?.output;
+
+    if (!body?.input || typeof output?.x !== 'number' || typeof output?.y !== 'number') {
+        res.status(400).json({ code: 400, message: 'input and output are required' });
+        return;
+    }
+
+    try {
+        const audit = await Audit.create({
+            input: body.input,
+            output: { x: output.x, y: output.y },
+            createdAt: new Date(),
+        });
+        res.status(201).json(toAuditDTO(audit));
+    } catch (error: unknown) {
+        res.status(500).json({ code: 500, message: getErrorMessage(error) });
+    }
 };

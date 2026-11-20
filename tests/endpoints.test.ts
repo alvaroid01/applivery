@@ -234,11 +234,24 @@ describe('DELETE /audit/:id', () => {
 });
 
 describe('POST /audit', () => {
-    it('returns the placeholder response', async () => {
+    it('stores an audit', async () => {
+        const response = await request(app)
+            .post('/audit')
+            .send({
+                input: { protocols: ['avoid-mech'], scan },
+                output: { x: 0, y: 40 },
+            });
+
+        assert.equal(response.status, 201);
+        assert.equal(response.body.output.x, 0);
+        assert.equal(audits.length, 1);
+    });
+
+    it('rejects a body without output', async () => {
         const response = await request(app).post('/audit').send({});
 
-        assert.equal(response.status, 200);
-        assert.deepEqual(response.body, { message: 'Hello' });
+        assert.equal(response.status, 400);
+        assert.deepEqual(response.body, { code: 400, message: 'input and output are required' });
     });
 });
 
