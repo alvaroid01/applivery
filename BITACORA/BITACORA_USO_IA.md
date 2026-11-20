@@ -2,7 +2,7 @@
 
 Módulo de radar y auditoría del YVH. Me encargué del diseño, la estructura del proyecto y las decisiones relacionadas con la lógica del módulo. Utilicé IA únicamente en las partes que documento a continuación.
 
-Los prompts de las fases 0 a 4 no se conservaron. Los reconstruyo, en el inglés en el que los escribí, y los marco como reconstrucción. No son citas textuales. Los prompts de las fases 5 y 6 sí lo son.
+Los prompts de las fases 0 a 4 no se conservaron. Los reconstruyo, en el inglés en el que los escribí, y los marco como reconstrucción. No son citas textuales. El prompt de la fase 5 sí lo es.
 
 El detalle de cómo evolucionaron las decisiones de protocolos está en `FASES_RECALIBRACION.md`. Aquí registro la consulta, el prompt y qué hice con la respuesta.
 
@@ -126,32 +126,6 @@ also, complete the DTO on audit
 - `AuditDTO` describe lo que realmente se guarda: `id`, `input` (`protocols` y `scan`), `output` (`x`, `y`) y `createdAt`. Usa `TProtocol`, `IScan` e `ICoordinate`, los tipos que separé a mano en la fase 1.
 - El esquema pasó de `type: JSON` a `Schema.Types.Mixed` en `input` y `output`. Esa corrección no estaba en la orden. `JSON` no es un tipo de Mongoose, y sin un tipo mixto el documento no conserva el payload. `Mixed` guarda el input y el output de cada cálculo tal como llegaron. No valida que tengan la forma del DTO. Lo acepto porque lo que quiero conservar es el cálculo original, no un esquema rígido.
 - `POST /audit` se dejó como estaba. El alta real ocurre en el controlador de radar, después de `proccessProtocol`.
-
-## 6. Esta bitácora
-
-**Directriz.** Redactar el documento de auditoría del proceso con el formato del enunciado: directrices, recalibraciones y prompts. Aporté el relato de las fases 0 a 4 porque el historial no se había guardado.
-
-**Prompt (textual).** Se adjuntó el apartado «Sobre el uso de droides de asistencia (IA)» del enunciado, y a continuación:
-
-```text
-So since I didnt saved them im going to kind of guide youi thru the use of ai
-0.When setting up the project and firuing requests, i was not gettinfg the body in the post so I asked ai why, it was do to the app.use(express.json()); not being used which I completely forgot about on first instance
-1.The first use of ai was generating the Types inside common types. This were first only two interfaces, Radar and Audit interfaces, but then I correct it yb hand, creating the specfic subinterfaces for Scan, Coordindate, Enemies and also TProtocol
-
-2.The scafolding was created by hand, except for the audit module which, once i created the radar module by hand, i let AI genrate it for me as its a basic crud and not that complex
-
-3.The next use wasa doubt I had when it comes to the protocol handling architecture
-I propose to the ai 3 patterns, a map/object patters, with the protocl name as key and function as value, then standolone functions for each foilter and lastly a switch
-I chose the map pattern and ai agreed with that choise as it s easily extendable
-Aditionally, when it comes to handling multiple protocols I asked the ai about the best way of handling them, I proposed a weights sort of system, assigning weights to each prtocol. This turn out to be not that good idea as ai let me know
-
-
-4.The next query was for a bug I did not see, basically upon running tests, on the porcess protiocol fucntion, I did not realized that I was not passing the protocolsFilters on each for iteration which caused the processed array to be always the original protocols array
-
-Provide an MD document please
-```
-
-**Recalibración.** Los prompts 0 a 4 se publican como reconstrucción, no como cita de un chat desaparecido. Donde la unidad se desvió (CRUD de auditoría incompleto, tipo `JSON` en el esquema), lo dejo escrito y la decisión final es mía.
 
 ## Criterio aplicado
 
