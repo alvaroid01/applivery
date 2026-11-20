@@ -41,7 +41,8 @@ export const createRadar = async (req: Request, res: Response) => {
             createdAt: new Date().toISOString(),
         });
         res.status(200).json(response);
-    } catch (error: any) {
-        res.status(500).json({ code: 500, message: error });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Unexpected error';
+        res.status(500).json({ code: 500, message });
     }
 };

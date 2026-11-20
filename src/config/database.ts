@@ -1,6 +1,9 @@
+import { existsSync } from 'node:fs';
 import mongoose from 'mongoose';
 
-process.loadEnvFile();
+if (existsSync('.env')) {
+    process.loadEnvFile();
+}
 
 const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_HOST } = process.env;
 
@@ -16,10 +19,11 @@ connectToMongoDB();
 
 async function connectToMongoDB() {
     try {
-        await mongoose.connect(mongoUri);
+        await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 10000 });
         console.log('You successfully connected to MongoDB!');
         return mongoose;
     } catch (err) {
+        console.error('MongoDB connection failed');
         console.dir(err);
     }
 }

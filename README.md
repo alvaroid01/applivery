@@ -29,10 +29,12 @@ MONGODB_HOST=applivercluster.yqpvtl0.mongodb.net
 ## Start
 
 ```bash
-npm start
+npm run dev
 ```
 
-The API listens on port 8888.
+`npm start` runs the same server without reloading. Railway uses that command.
+
+The API listens on `PORT` from the environment, or 8888 when it is not set.
 
 ## Tests
 
