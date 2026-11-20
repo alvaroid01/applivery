@@ -153,6 +153,10 @@ Provide an MD document please
 
 **Recalibración.** Los prompts 0 a 4 se publican como reconstrucción, no como cita de un chat desaparecido. Donde la unidad se desvió (CRUD de auditoría incompleto, tipo `JSON` en el esquema), lo dejo escrito y la decisión final es mía.
 
+## 7. Tests unitarios
+
+Los tests de `tests/protocols.test.ts` y `tests/endpoints.test.ts` los creó la unidad. Cubren los protocolos y los endpoints de radar y auditoría. `./tests.sh` y `test_cases.txt` son los del enunciado; esos no los generé con IA.
+
 ## Criterio aplicado
 
 | Fase | Qué se pidió | Qué se rechazó o se corrigió | Quién decidió |
@@ -162,3 +166,4 @@ Provide an MD document please
 | 2 y 5 | CRUD de auditoría con la forma del radar | Id fijo, respuesta vacía, DTO vacío y tipo de esquema inválido. Lo vi al revisar y probar los endpoints | Yo fijé el alcance; la unidad aplicó la corrección |
 | 3 | Elegir entre mapa, funciones sueltas y `switch` | Descarté el sistema de pesos para combinar protocolos | Yo; la unidad confirmó el mapa y desaconsejó los pesos |
 | 4 | Localizar un fallo de tests con varios protocolos | En cada vuelta se pasaba la lista original, no la ya actualizada | Yo vi el síntoma; la unidad señaló el bucle |
+| 7 | Tests unitarios de protocolos y endpoints | — | La unidad los escribió |
