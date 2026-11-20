@@ -1,6 +1,7 @@
 import { type Request, type Response } from 'express';
 
-import { proccessProtocol } from '../../common/protocols.ts';
+import { processProtocol, protocolFilters } from '../../common/protocols.ts';
+import type { IScan, TProtocol } from '../../common/types/index.ts';
 import { Radar } from './radar.model.ts';
 import { Audit } from '../audit/audit.model.ts';
 
@@ -13,23 +14,27 @@ Constraints
 -Persist in db (MongoDB)
 */
 export const createRadar = async (req: Request, res: Response) => {
-    const body = req.body;
-    const { protocols, scan } = body as any;
+    const body = req.body as { protocols?: TProtocol[]; scan?: IScan[] } | undefined;
+    const { protocols, scan } = body ?? {};
 
     if (!body) {
         res.status(400).send({ code: 400, message: 'Payload must not be empty' });
         return;
     }
-    if (!protocols || protocols.length === 0) {
+    if (!Array.isArray(protocols) || protocols.length === 0) {
         res.status(400).send({ code: 400, message: 'Protocols must not be empty. Provide at least one protocol' });
         return;
     }
-    if (!scan || scan.length === 0) {
+    if (!Array.isArray(scan) || scan.length === 0) {
         res.status(400).send({ code: 400, message: 'Scan must not be empty. Provide at least one scan' });
         return;
     }
+    if (protocols.some(protocol => !protocolFilters[protocol])) {
+        res.status(400).json({ code: 400, message: 'Unknown protocol' });
+        return;
+    }
     try {
-        const response = proccessProtocol(protocols, scan);
+        const response = processProtocol(protocols, scan);
         if (!response) {
             res.status(400).json({ code: 400, message: 'No valid target found' });
             return;

@@ -101,6 +101,15 @@ describe('POST /radar', () => {
         assert.deepEqual(audits[0]?.output, { x: 0, y: 40 });
     });
 
+    it('rejects an unknown protocol', async () => {
+        const response = await request(app).post('/radar').send({ protocols: ['fly'], scan });
+
+        assert.equal(response.status, 400);
+        assert.deepEqual(response.body, { code: 400, message: 'Unknown protocol' });
+        assert.equal(radarCreates.length, 0);
+        assert.equal(audits.length, 0);
+    });
+
     it('rejects an empty protocol list', async () => {
         const response = await request(app).post('/radar').send({ protocols: [], scan });
 

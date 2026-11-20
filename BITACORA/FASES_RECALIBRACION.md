@@ -10,8 +10,8 @@ Esta reconstrucción se basa en las decisiones que fui tomando durante el desarr
 | --- | --- | --- |
 | Elección del mapa `protocolFilters` | Decisión arquitectónica | Contraste de tres alternativas |
 | Descartar el sistema de pesos | Recalibración de diseño | Evaluación de la propuesta |
-| Corregir el bucle de `proccessProtocol` | Debugging | Identificación del error |
-| Separar `applyContraints` | Decisión de implementación | Ninguna |
+| Corregir el bucle de `processProtocol` | Debugging | Identificación del error |
+| Separar `applyConstraints` | Decisión de implementación | Ninguna |
 | Devolver una lista nueva en cada función | Decisión de implementación | Ninguna |
 | `assist-allies` sin aliados, y lista vacía | Decisión de implementación | Ninguna |
 
@@ -39,13 +39,13 @@ Con esa decisión, `closest-enemies` seguido de `avoid-mech` funciona así: prim
 
 El enunciado dice que deben priorizarse los puntos en los que haya algún aliado. Priorizar no es descartar el resto. Lo dejé como `prioritize-mech`: si hay puntos con aliados, me quedo con esos; si no hay ninguno, la lista sigue igual y otro protocolo puede seguir eligiendo.
 
-`avoid-mech`, `avoid-crossfire` y la criba de distancia sí pueden vaciar la lista, porque ahí el enunciado prohíbe el ataque y no ofrece un plan B. `proccessProtocol` mira si queda algún punto antes de leer el primero. Si no queda ninguno, no devuelve coordenadas. El controlador responde 400 con `No valid target found` y no guarda la auditoría.
+`avoid-mech`, `avoid-crossfire` y la criba de distancia sí pueden vaciar la lista, porque ahí el enunciado prohíbe el ataque y no ofrece un plan B. `processProtocol` mira si queda algún punto antes de leer el primero. Si no queda ninguno, no devuelve coordenadas. El controlador responde 400 con `No valid target found` y no guarda la auditoría.
 
-## Corregir el bucle de `proccessProtocol`
+## Corregir el bucle de `processProtocol`
 
 Esta es la corrección hecha con IA. Al correr los tests, el array procesado seguía siendo el original. El fallo no era que el mapa no existiera. El fallo era que en cada vuelta del `for` no pasaba el array ya actualizado: cada protocolo volvía a recibir la lista inicial, así que el resultado de uno no llegaba al siguiente.
 
-No lo veía. Le pedí a la IA que mirara `proccessProtocol` con ese síntoma, y señaló el bucle.
+No lo veía. Le pedí a la IA que mirara `processProtocol` con ese síntoma, y señaló el bucle.
 
 La corrección guarda el retorno y lo usa como entrada de la vuelta siguiente:
 
@@ -58,7 +58,7 @@ if (filterFunction) {
 
 `response` empieza siendo la lista que sale de las restricciones. Cada protocolo recibe esa variable, y lo que devuelve la sustituye. El protocolo siguiente ve la lista ya transformada, no la original.
 
-## Separar `applyContraints`
+## Separar `applyConstraints`
 
 Decisión mía, sin asistencia. La distancia máxima y la obligación de que haya enemigos no son protocolos de la petición. Los aplico una vez, antes del bucle: el punto sigue solo si `enemies.number` es mayor que 0 y la distancia al origen `{x:0, y:0}` es menor o igual que 100. La distancia es euclídea, con `Math.hypot`.
 

@@ -92,7 +92,7 @@ When the request includes several protocols, I am thinking of a weight system: a
 
 ## 4. El bucle no encadenaba la lista
 
-**Directriz.** Los tests fallaban cuando había varios protocolos. No veía la causa. Pedí que localizara el fallo en `proccessProtocol`, no que reescribiera el módulo.
+**Directriz.** Los tests fallaban cuando había varios protocolos. No veía la causa. Pedí que localizara el fallo en `processProtocol`, no que reescribiera el módulo.
 
 **Prompt (reconstrucción).** Solo el síntoma. En ese momento no había identificado la causa.
 
@@ -102,7 +102,7 @@ Im having an issue with my processProtocol function. When running the tests it l
 
 **Resultado.** La unidad señaló el bucle: en cada vuelta no se pasaba el array ya actualizado, así que cada protocolo volvía a recibir la lista original.
 
-**Recalibración.** Guardé el retorno de cada función y lo usé como entrada de la siguiente. El cambio y cómo queda la propagación están en `FASES_RECALIBRACION.md`, en «Corregir el bucle de `proccessProtocol`».
+**Recalibración.** Guardé el retorno de cada función y lo usé como entrada de la siguiente. El cambio y cómo queda la propagación están en `FASES_RECALIBRACION.md`, en «Corregir el bucle de `processProtocol`».
 
 ## 5. Lectura, borrado y DTO de auditoría
 

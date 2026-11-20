@@ -22,20 +22,18 @@ export const protocolFilters: Record<string, (scans: IScan[]) => IScan[]> = {
     'avoid-mech': scans => scans.filter(scan => scan.enemies.type !== 'mech'),
 };
 
-export const proccessProtocol = (protocols: TProtocol[], scans: IScan[]) => {
-    if (!scans && !protocols) return;
+export const processProtocol = (protocols: TProtocol[], scans: IScan[]) => {
+    if (!scans?.length || !protocols?.length) return;
 
-    const filteredScans: IScan[] = applyContraints(scans);
+    const filteredScans: IScan[] = applyConstraints(scans);
 
     let response: IScan[] = filteredScans;
 
     for (let i = 0; i < protocols.length; i++) {
         const protocol = protocols[i];
-        if (!protocol) continue;
-        const filterFunction = protocolFilters[protocol];
-        if (filterFunction) {
-            response = filterFunction(response);
-        }
+        const filterFunction = protocol ? protocolFilters[protocol] : undefined;
+        if (!filterFunction) return;
+        response = filterFunction(response);
     }
 
     const target = response[0];
@@ -48,7 +46,7 @@ export const proccessProtocol = (protocols: TProtocol[], scans: IScan[]) => {
 };
 
 export const getDistance = (point: ICoordinate): number => Math.hypot(point.x, point.y);
-export const applyContraints = (coordinates: IScan[]): IScan[] => {
+export const applyConstraints = (coordinates: IScan[]): IScan[] => {
     const filteredCoordinates = [...coordinates].filter((el: IScan) => {
         const calc = el.enemies.number > 0 && getDistance(el.coordinates) <= 100;
         return calc;
@@ -76,12 +74,12 @@ Two types of protocols
 1.Sorting protocols => order the array without removing elements
     closest-enemies => Distance 
     furthest-enemies => Distance 
-    prioritize-mech => Type
-    assist-allies => Type
 
 2.Filtering protocols => Filter out elements 
     avoid-crossfire
     avoid-mech
+    prioritize-mech => Type, keeps the original list when there is no mech
+    assist-allies => Type, keeps the original list when there are no allies
 
 
 */
